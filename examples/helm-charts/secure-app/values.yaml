@@ -1,0 +1,32 @@
+# Default values for secure-app
+replicaCount: 3
+
+image:
+  repository: nginx
+  tag: "1.25-alpine"
+  pullPolicy: IfNotPresent
+
+security:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+networkPolicy:
+  enabled: true
+  
+podSecurityStandard: restricted
