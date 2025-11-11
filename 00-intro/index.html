@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://yourusername.github.io/k8s-architecture-and-security-training/00-intro/">
       
       
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../01-k8s-basics/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +26,7 @@
     
     
       
-        <title>Module 00: Introduction and Prerequisites - Kubernetes Architecture and Security Training</title>
+        <title>Module 00 - Introduction - Kubernetes Architecture and Security Training</title>
       
     
     
@@ -114,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Module 00: Introduction and Prerequisites
+              Module 00 - Introduction
             
           </span>
         </div>
@@ -238,11 +242,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../README.md" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -262,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../docs/01-k8s-basics.md" class="md-tabs__link">
+        <a href="../01-k8s-basics/" class="md-tabs__link">
           
   
   
@@ -282,7 +288,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../docs/05-authn-authz.md" class="md-tabs__link">
+        <a href="../05-authn-authz/" class="md-tabs__link">
           
   
   
@@ -302,31 +308,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../docs/11-runtime-security.md" class="md-tabs__link">
+        <a href="../11-runtime-security/" class="md-tabs__link">
           
   
   
   Advanced (Weeks 5-6)
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../REFERENCES.md" class="md-tabs__link">
-          
-  
-  
-  Resources
 
         </a>
       </li>
@@ -411,28 +397,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -445,7 +434,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Getting Started
@@ -456,56 +445,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../README.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
         
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
   
   
   <span class="md-ellipsis">
-    Overview
+    Module 00 - Introduction
     
   </span>
   
 
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../SUMMARY.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Course Roadmap
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../docs/00-intro.md" class="md-nav__link">
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -516,6 +481,344 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning Objectives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#target-audience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Target Audience
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Required Knowledge
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommended Knowledge
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Software Requirements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hardware-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hardware Requirements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#course-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Course Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Course Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#part-i-foundation-modules-01-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part I: Foundation (Modules 01-04)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-ii-security-modules-05-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part II: Security (Modules 05-10)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-iii-advanced-modules-11-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part III: Advanced (Modules 11-15)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-path-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning Path Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-concepts-and-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Concepts and Glossary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-first-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security-First Approach
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lab Environment Setup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab Environment Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-kind-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 1: kind (Recommended)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-k3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 2: k3d
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-3-minikube" class="md-nav__link">
+    <span class="md-ellipsis">
+      Option 3: minikube
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing Cluster
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Learning Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#official-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Official Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Resources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community" class="md-nav__link">
+    <span class="md-ellipsis">
+      Community
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessment-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Assessment Readiness
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-common-setup-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting Common Setup Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting Common Setup Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-not-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker Not Running
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kind-cluster-creation-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      kind Cluster Creation Fails
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubectl-cannot-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      kubectl Cannot Connect
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -580,7 +883,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/01-k8s-basics.md" class="md-nav__link">
+      <a href="../01-k8s-basics/" class="md-nav__link">
         
   
   
@@ -603,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/02-control-plane.md" class="md-nav__link">
+      <a href="../02-control-plane/" class="md-nav__link">
         
   
   
@@ -626,7 +929,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/03-networking.md" class="md-nav__link">
+      <a href="../03-networking/" class="md-nav__link">
         
   
   
@@ -649,7 +952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/04-storage.md" class="md-nav__link">
+      <a href="../04-storage/" class="md-nav__link">
         
   
   
@@ -724,7 +1027,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/05-authn-authz.md" class="md-nav__link">
+      <a href="../05-authn-authz/" class="md-nav__link">
         
   
   
@@ -747,7 +1050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/06-pod-security.md" class="md-nav__link">
+      <a href="../06-pod-security/" class="md-nav__link">
         
   
   
@@ -770,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/07-admission-policy.md" class="md-nav__link">
+      <a href="../07-admission-policy/" class="md-nav__link">
         
   
   
@@ -793,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/08-observability.md" class="md-nav__link">
+      <a href="../08-observability/" class="md-nav__link">
         
   
   
@@ -816,7 +1119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/09-supply-chain.md" class="md-nav__link">
+      <a href="../09-supply-chain/" class="md-nav__link">
         
   
   
@@ -839,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/10-network-security.md" class="md-nav__link">
+      <a href="../10-network-security/" class="md-nav__link">
         
   
   
@@ -914,7 +1217,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/11-runtime-security.md" class="md-nav__link">
+      <a href="../11-runtime-security/" class="md-nav__link">
         
   
   
@@ -937,7 +1240,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/12-incident-response.md" class="md-nav__link">
+      <a href="../12-incident-response/" class="md-nav__link">
         
   
   
@@ -960,7 +1263,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/13-cis-compliance.md" class="md-nav__link">
+      <a href="../13-cis-compliance/" class="md-nav__link">
         
   
   
@@ -983,7 +1286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/14-multi-cluster.md" class="md-nav__link">
+      <a href="../14-multi-cluster/" class="md-nav__link">
         
   
   
@@ -1006,156 +1309,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/15-case-studies.md" class="md-nav__link">
+      <a href="../15-case-studies/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Module 15 - Case Studies
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Resources
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
-            <span class="md-nav__icon md-icon"></span>
-            Resources
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../REFERENCES.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    References
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CONTRIBUTING.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Contributing
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../WORKFLOW.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Workflow Guide
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../CHANGELOG.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Changelog
     
   </span>
   
