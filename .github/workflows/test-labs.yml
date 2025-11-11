@@ -1,0 +1,28 @@
+name: Lab Tests
+
+on:
+  pull_request:
+    paths: [ 'labs/**', 'examples/**' ]
+  workflow_dispatch:
+
+jobs:
+  test-lab-smoke:
+    name: Lab Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.28.0'
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: training-cluster
+          wait: 120s
+      - run: |
+          kubectl cluster-info
+          kubectl get nodes
+      - run: |
+          kubectl create namespace smoke-test
+          kubectl run test-pod --image=nginx:1.25 -n smoke-test
+          kubectl wait --for=condition=Ready pod/test-pod -n smoke-test --timeout=60s
+          kubectl delete namespace smoke-test
