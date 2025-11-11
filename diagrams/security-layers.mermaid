@@ -1,0 +1,30 @@
+graph TD
+    A[Application Code] --> B[Container Image]
+    B --> C[Pod Security]
+    C --> D[Network Policies]
+    D --> E[RBAC]
+    E --> F[Admission Control]
+    F --> G[Audit Logging]
+    G --> H[Runtime Security]
+    H --> I[Host Security]
+    
+    subgraph "Defense in Depth"
+        B
+        C
+        D
+        E
+        F
+        G
+        H
+        I
+    end
+    
+    style A fill:#D32F2F,color:#fff
+    style B fill:#FF5722,color:#fff
+    style C fill:#FF9800,color:#fff
+    style D fill:#FFC107,color:#fff
+    style E fill:#8BC34A,color:#fff
+    style F fill:#4CAF50,color:#fff
+    style G fill:#00BCD4,color:#fff
+    style H fill:#2196F3,color:#fff
+    style I fill:#3F51B5,color:#fff

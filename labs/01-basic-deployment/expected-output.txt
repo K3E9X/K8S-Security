@@ -1,0 +1,318 @@
+Expected Output for Lab 01: Basic Deployment
+============================================
+
+1. Namespace Creation
+--------------------
+$ kubectl create namespace lab01-basic-deployment
+namespace/lab01-basic-deployment created
+
+$ kubectl get namespaces | grep lab01
+lab01-basic-deployment   Active   5s
+
+
+2. Initial Deployment
+--------------------
+$ kubectl create deployment web-app --image=nginx:1.25-alpine --replicas=3 --port=80
+deployment.apps/web-app created
+
+$ kubectl rollout status deployment/web-app
+Waiting for deployment "web-app" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "web-app" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "web-app" rollout to finish: 2 of 3 updated replicas are available...
+deployment "web-app" successfully rolled out
+
+$ kubectl get deployments
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+web-app   3/3     3            3           1m
+
+
+3. Pod Information
+-----------------
+$ kubectl get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+web-app-5c7d8f9b6d-abc12   1/1     Running   0          1m
+web-app-5c7d8f9b6d-def34   1/1     Running   0          1m
+web-app-5c7d8f9b6d-ghi56   1/1     Running   0          1m
+
+$ kubectl get pods -o wide
+NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE
+web-app-5c7d8f9b6d-abc12   1/1     Running   0          1m    10.244.1.5   k8s-security-lab-worker
+web-app-5c7d8f9b6d-def34   1/1     Running   0          1m    10.244.2.5   k8s-security-lab-worker2
+web-app-5c7d8f9b6d-ghi56   1/1     Running   0          1m    10.244.1.6   k8s-security-lab-worker
+
+
+4. Service Creation - ClusterIP
+-------------------------------
+$ kubectl apply -f manifests/web-app-service-clusterip.yaml
+service/web-app-clusterip created
+
+$ kubectl get service web-app-clusterip
+NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+web-app-clusterip   ClusterIP   10.96.123.45    <none>        80/TCP    10s
+
+$ kubectl get endpoints web-app-clusterip
+NAME                ENDPOINTS                                      AGE
+web-app-clusterip   10.244.1.5:80,10.244.1.6:80,10.244.2.5:80     20s
+
+
+5. Testing Internal Access
+--------------------------
+$ kubectl run test-pod --image=busybox:1.36 -it --rm --restart=Never -- wget -qO- http://web-app-clusterip
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+...
+</body>
+</html>
+pod "test-pod" deleted
+
+
+6. Service Creation - NodePort
+------------------------------
+$ kubectl apply -f manifests/web-app-service-nodeport.yaml
+service/web-app-nodeport created
+
+$ kubectl get service web-app-nodeport
+NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+web-app-nodeport   NodePort   10.96.234.56    <none>        80:31234/TCP   5s
+
+$ curl http://localhost:31234
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+
+7. Security Check - Initial (Before Hardening)
+----------------------------------------------
+$ ./scripts/security-check.sh
+
+========================================
+Security Check for Deployment: web-app
+========================================
+
+Checking Security Context...
+✗ Container may be running as root (security risk)
+  Recommendation: Set securityContext.runAsNonRoot: true
+⚠ Read-only root filesystem not enabled
+  Recommendation: Set securityContext.readOnlyRootFilesystem: true
+✗ Privilege escalation not prevented
+  Recommendation: Set securityContext.allowPrivilegeEscalation: false
+⚠ No capabilities being dropped
+  Recommendation: Drop all capabilities and add only required ones
+
+Checking Resource Limits...
+✗ No resource limits defined (can lead to resource exhaustion)
+  Recommendation: Define resources.limits.cpu and resources.limits.memory
+⚠ No resource requests defined
+  Recommendation: Define resources.requests.cpu and resources.requests.memory
+
+Checking Health Probes...
+⚠ No liveness probe configured
+  Recommendation: Add livenessProbe for automatic restart of unhealthy containers
+⚠ No readiness probe configured
+  Recommendation: Add readinessProbe to ensure traffic only goes to ready pods
+
+Checking Pod Security...
+✓ No privileged containers
+✓ Host network not enabled
+✓ Host PID not enabled
+✓ Host IPC not enabled
+
+Checking Runtime Security...
+⚠ No seccomp profile configured
+  Recommendation: Set securityContext.seccompProfile.type: RuntimeDefault
+
+Checking Running Pods...
+
+Pod: web-app-5c7d8f9b6d-abc12
+  ✗ Pod is running as root (UID 0)
+
+Pod: web-app-5c7d8f9b6d-def34
+  ✗ Pod is running as root (UID 0)
+
+Pod: web-app-5c7d8f9b6d-ghi56
+  ✗ Pod is running as root (UID 0)
+
+========================================
+Security Check Summary
+========================================
+
+Checks passed: 4
+Issues found:  13
+
+✗ Deployment has significant security issues
+
+Apply the hardened deployment to fix these issues:
+  kubectl apply -f manifests/web-app-deployment-secure.yaml
+
+
+8. Applying Secure Deployment
+-----------------------------
+$ kubectl apply -f manifests/web-app-deployment-secure.yaml
+deployment.apps/web-app configured
+
+$ kubectl rollout status deployment/web-app
+Waiting for deployment "web-app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "web-app" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "web-app" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "web-app" rollout to finish: 1 old replicas are pending termination...
+deployment "web-app" successfully rolled out
+
+$ kubectl get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+web-app-7b8c9d4e5f-xyz01   1/1     Running   0          30s
+web-app-7b8c9d4e5f-xyz02   1/1     Running   0          45s
+web-app-7b8c9d4e5f-xyz03   1/1     Running   0          60s
+
+
+9. Verify Security Improvements
+-------------------------------
+$ kubectl exec web-app-7b8c9d4e5f-xyz01 -- id
+uid=101(nginx) gid=101(nginx) groups=101(nginx)
+
+$ kubectl describe pod web-app-7b8c9d4e5f-xyz01 | grep -A 5 "Limits:"
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:        100m
+      memory:     64Mi
+
+
+10. Security Check - After Hardening
+------------------------------------
+$ ./scripts/security-check.sh
+
+========================================
+Security Check for Deployment: web-app
+========================================
+
+Checking Security Context...
+✓ Container configured to run as non-root
+✓ Read-only root filesystem enabled
+✓ Privilege escalation prevented
+✓ Capabilities are being dropped
+
+Checking Resource Limits...
+✓ Resource limits defined
+✓ Resource requests defined
+
+Checking Health Probes...
+✓ Liveness probe configured
+✓ Readiness probe configured
+
+Checking Pod Security...
+✓ No privileged containers
+✓ Host network not enabled
+✓ Host PID not enabled
+✓ Host IPC not enabled
+
+Checking Runtime Security...
+✓ Seccomp profile configured
+
+Checking Running Pods...
+
+Pod: web-app-7b8c9d4e5f-xyz01
+  ✓ Pod is running as non-root user
+
+Pod: web-app-7b8c9d4e5f-xyz02
+  ✓ Pod is running as non-root user
+
+Pod: web-app-7b8c9d4e5f-xyz03
+  ✓ Pod is running as non-root user
+
+========================================
+Security Check Summary
+========================================
+
+Checks passed: 16
+Issues found:  0
+
+✓ Deployment follows security best practices!
+
+
+11. Scaling the Deployment
+--------------------------
+$ kubectl scale deployment web-app --replicas=5
+deployment.apps/web-app scaled
+
+$ kubectl get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+web-app-7b8c9d4e5f-xyz01   1/1     Running   0          5m
+web-app-7b8c9d4e5f-xyz02   1/1     Running   0          5m
+web-app-7b8c9d4e5f-xyz03   1/1     Running   0          5m
+web-app-7b8c9d4e5f-xyz04   1/1     Running   0          10s
+web-app-7b8c9d4e5f-xyz05   1/1     Running   0          10s
+
+
+12. Testing Application Functionality
+-------------------------------------
+$ kubectl run test-pod --image=busybox:1.36 -it --rm --restart=Never -- wget -qO- http://web-app-clusterip
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+$ curl http://localhost:31234
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+
+
+13. Rollout History
+-------------------
+$ kubectl rollout history deployment/web-app
+deployment.apps/web-app
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+14. Cleanup
+----------
+$ kubectl delete namespace lab01-basic-deployment
+namespace "lab01-basic-deployment" deleted
+
+# Or using script:
+$ ./scripts/cleanup.sh
+Cleaning up Lab 01: Basic Deployment
+=====================================
+
+Deleting namespace: lab01-basic-deployment
+namespace "lab01-basic-deployment" deleted
+✓ Namespace deleted
+
+Cleanup complete!
+
+
+Success Indicators:
+===================
+✓ Deployment successfully created with 3 replicas
+✓ All pods reach Running status and 1/1 Ready
+✓ Services created and accessible (ClusterIP, NodePort)
+✓ Security context properly applied
+✓ Pods run as non-root user (UID 101)
+✓ Resource limits and requests defined
+✓ Health probes functioning correctly
+✓ Application responds to HTTP requests
+✓ Scaling works without issues
+✓ Rolling updates complete successfully
+✓ All security checks pass after hardening

@@ -1,0 +1,112 @@
+Expected Output for Lab 06: Pod Security
+=========================================
+
+1. Creating Namespaces with Security Labels
+-------------------------------------------
+$ kubectl apply -f manifests/namespaces.yaml
+namespace/lab06-privileged created
+namespace/lab06-baseline created
+namespace/lab06-restricted created
+
+2. Testing Privileged Namespace
+-------------------------------
+$ kubectl apply -f manifests/pod-privileged.yaml
+pod/privileged-pod created
+
+$ kubectl get pod -n lab06-privileged
+NAME              READY   STATUS    RESTARTS   AGE
+privileged-pod    1/1     Running   0          10s
+
+3. Testing Baseline Namespace with Privileged Pod
+-------------------------------------------------
+$ kubectl apply -f manifests/pod-privileged.yaml -n lab06-baseline
+Error from server (Forbidden): error when creating "manifests/pod-privileged.yaml":
+pods "privileged-pod" is forbidden: violates PodSecurity "baseline:latest":
+privileged (container "privileged-container" must not set securityContext.privileged=true)
+
+4. Testing Baseline with Compliant Pod
+--------------------------------------
+$ kubectl apply -f manifests/pod-baseline.yaml
+pod/baseline-pod created
+
+$ kubectl get pod -n lab06-baseline
+NAME           READY   STATUS    RESTARTS   AGE
+baseline-pod   1/1     Running   0          10s
+
+5. Testing Restricted Namespace
+-------------------------------
+$ kubectl apply -f manifests/pod-restricted.yaml
+pod/restricted-pod created
+
+$ kubectl get pod -n lab06-restricted
+NAME             READY   STATUS    RESTARTS   AGE
+restricted-pod   1/1     Running   0          15s
+
+6. Verifying Non-Root User
+--------------------------
+$ kubectl exec -n lab06-restricted restricted-pod -- id
+uid=1000 gid=1000 groups=1000
+
+7. Security Compliance Check
+----------------------------
+$ ./scripts/check-pod-security.sh
+
+========================================
+Pod Security Compliance Check
+========================================
+
+Checking namespace: lab06-privileged
+Pod Security Standards:
+pod-security.kubernetes.io/enforce: privileged
+pod-security.kubernetes.io/audit: privileged
+pod-security.kubernetes.io/warn: privileged
+
+  Pod: privileged-pod
+    ✗ May be running as root
+    ⚠ Privilege escalation not explicitly prevented
+    ⚠ No capabilities dropped
+    ⚠ Root filesystem not read-only
+
+Checking namespace: lab06-baseline
+Pod Security Standards:
+pod-security.kubernetes.io/enforce: baseline
+pod-security.kubernetes.io/audit: baseline
+pod-security.kubernetes.io/warn: baseline
+
+  Pod: baseline-pod
+    ⚠ May be running as root
+    ✓ Privilege escalation prevented
+    ✓ Capabilities dropped
+    ⚠ Root filesystem not read-only
+
+Checking namespace: lab06-restricted
+Pod Security Standards:
+pod-security.kubernetes.io/enforce: restricted
+pod-security.kubernetes.io/audit: restricted
+pod-security.kubernetes.io/warn: restricted
+
+  Pod: restricted-pod
+    ✓ Running as non-root user
+    ✓ Privilege escalation prevented
+    ✓ Capabilities dropped
+    ✓ Read-only root filesystem
+
+  Pod: secure-app-xxx-yyy
+    ✓ Running as non-root user
+    ✓ Privilege escalation prevented
+    ✓ Capabilities dropped
+    ✓ Read-only root filesystem
+
+========================================
+Check Complete
+========================================
+
+Success Indicators:
+===================
+✓ Namespaces created with appropriate Pod Security labels
+✓ Privileged namespace allows all pod configurations
+✓ Baseline namespace blocks privileged pods
+✓ Restricted namespace enforces best practices
+✓ Pods in restricted namespace run as non-root
+✓ Security contexts properly configured
+✓ Compliance check passes for restricted pods

@@ -1,0 +1,76 @@
+Expected Output for Lab 03: Network Policies
+============================================
+
+1. Initial Deployment
+--------------------
+$ kubectl get pods -n lab03-netpol
+NAME                        READY   STATUS    RESTARTS   AGE
+backend-xxx-yyy            1/1     Running   0          1m
+backend-xxx-zzz            1/1     Running   0          1m
+database-xxx-yyy           1/1     Running   0          1m
+frontend-xxx-yyy           1/1     Running   0          1m
+frontend-xxx-zzz           1/1     Running   0          1m
+
+2. Test Before Policies (All Should Work)
+-----------------------------------------
+$ kubectl exec -it deploy/frontend -- curl -s http://backend:8080/api/health
+Backend API - Healthy
+
+$ kubectl exec -it deploy/frontend -- nc -zv database 5432
+database (10.244.1.10:5432) open
+
+3. After Default Deny (All Should Fail)
+---------------------------------------
+$ kubectl exec -it deploy/frontend -- timeout 5 curl -s http://backend:8080/api/health
+Connection denied (expected)
+
+4. After Applying Policies
+--------------------------
+$ kubectl get networkpolicies
+NAME                      POD-SELECTOR    AGE
+allow-dns                 <none>          1m
+backend-allow-frontend    app=backend     1m
+database-allow-backend    app=database    1m
+default-deny-all          <none>          2m
+frontend-egress           app=frontend    1m
+
+5. Connectivity Test Results
+----------------------------
+$ ./scripts/test-connectivity.sh
+
+========================================
+Network Policy Connectivity Tests
+========================================
+
+Checking pod status...
+✓ All pods are running
+
+Testing DNS resolution...
+✓ DNS resolution works
+
+Testing allowed connections...
+Testing: Frontend → Backend ... ✓ PASS (connection successful as expected)
+Testing: Backend → Database ... ✓ PASS (connection successful as expected)
+
+Testing blocked connections...
+Testing: Frontend → Database (should be blocked) ... ✓ PASS (connection blocked as expected)
+
+Testing application functionality...
+✓ Frontend can reach backend API
+
+Active Network Policies:
+NAME                      POD-SELECTOR    AGE
+allow-dns                 <none>          5m
+backend-allow-frontend    app=backend     4m
+database-allow-backend    app=database    3m
+default-deny-all          <none>          6m
+frontend-egress           app=frontend    2m
+
+========================================
+Test Summary
+========================================
+
+Tests passed: 6
+Tests failed: 0
+
+✓ All network policy tests passed!

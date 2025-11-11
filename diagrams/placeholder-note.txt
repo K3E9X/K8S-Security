@@ -1,0 +1,17 @@
+# Diagram PNG Files
+
+The .mermaid files in this directory can be rendered directly in GitHub and MkDocs.
+
+For draw.io diagrams:
+1. Create/edit .drawio files using https://app.diagrams.net/
+2. Export as PNG with these settings:
+   - Scale: 2x
+   - Border: 10px
+   - Background: Transparent or White
+3. Save with same base filename (e.g., control-plane.drawio -> control-plane.png)
+
+Example draw.io diagrams to create:
+- control-plane-architecture.drawio/png
+- networking-detailed.drawio/png
+- security-architecture.drawio/png
+- multi-cluster-architecture.drawio/png

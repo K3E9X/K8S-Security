@@ -1,0 +1,31 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lab05-pod-reader
+  labels:
+    app: rbac-lab
+rules:
+# Read-only access to pods cluster-wide
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lab05-namespace-viewer
+  labels:
+    app: rbac-lab
+rules:
+# Read-only access to namespaces
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list", "watch"]
+# Read access to most resources cluster-wide
+- apiGroups: ["", "apps", "batch"]
+  resources: ["pods", "services", "deployments", "jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]

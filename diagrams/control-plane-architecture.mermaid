@@ -1,0 +1,33 @@
+graph TB
+    subgraph "Control Plane"
+        API[kube-apiserver<br/>API Gateway]
+        ETCD[(etcd<br/>Key-Value Store)]
+        CM[controller-manager<br/>Reconciliation]
+        SCHED[kube-scheduler<br/>Pod Placement]
+    end
+    
+    subgraph "Worker Node"
+        KUBELET[kubelet<br/>Node Agent]
+        PROXY[kube-proxy<br/>Network Proxy]
+        RUNTIME[Container Runtime<br/>containerd/CRI-O]
+        POD1[Pod]
+        POD2[Pod]
+    end
+    
+    USER[User/Client] -->|kubectl| API
+    API <-->|Read/Write| ETCD
+    API -->|Watch| CM
+    API -->|Watch| SCHED
+    KUBELET -->|Register/Status| API
+    KUBELET -->|Manage| RUNTIME
+    RUNTIME -->|Run| POD1
+    RUNTIME -->|Run| POD2
+    PROXY -->|iptables rules| POD1
+    PROXY -->|iptables rules| POD2
+    
+    style API fill:#326CE5,color:#fff
+    style ETCD fill:#00C853,color:#fff
+    style CM fill:#FF9800,color:#fff
+    style SCHED fill:#FF9800,color:#fff
+    style KUBELET fill:#7B1FA2,color:#fff
+    style PROXY fill:#7B1FA2,color:#fff
