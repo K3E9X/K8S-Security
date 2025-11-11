@@ -1,0 +1,62 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: image-scanner
+  namespace: lab09-scanning
+spec:
+  # Run every day at 2 AM
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: image-scanner
+          containers:
+          - name: trivy
+            image: aquasec/trivy:latest
+            command:
+            - sh
+            - -c
+            - |
+              echo "Scanning images in namespace..."
+              kubectl get pods -n lab09-scanning -o jsonpath='{.items[*].spec.containers[*].image}' | \
+              tr ' ' '\n' | sort -u | while read image; do
+                echo "Scanning: $image"
+                trivy image --severity HIGH,CRITICAL "$image"
+              done
+            volumeMounts:
+            - name: cache
+              mountPath: /root/.cache
+          volumes:
+          - name: cache
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: image-scanner
+  namespace: lab09-scanning
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: image-scanner
+  namespace: lab09-scanning
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: image-scanner
+  namespace: lab09-scanning
+subjects:
+- kind: ServiceAccount
+  name: image-scanner
+roleRef:
+  kind: Role
+  name: image-scanner
+  apiGroup: rbac.authorization.k8s.io

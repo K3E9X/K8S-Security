@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-pod
+  namespace: lab06-privileged
+spec:
+  containers:
+  - name: privileged-container
+    image: nginx:alpine
+    securityContext:
+      privileged: true
+      runAsUser: 0
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "200m"

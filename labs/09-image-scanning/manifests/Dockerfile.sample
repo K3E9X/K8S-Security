@@ -1,0 +1,10 @@
+# Sample Dockerfile for testing
+FROM nginx:alpine
+
+# Add a simple custom page
+RUN echo '<html><body><h1>Scanned Application</h1><p>This image has been scanned for vulnerabilities.</p></body></html>' > /usr/share/nginx/html/index.html
+
+# Run as non-root
+USER 101
+
+EXPOSE 80

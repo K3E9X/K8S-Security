@@ -1,0 +1,264 @@
+Expected Output for Lab 00: Environment Setup
+===============================================
+
+1. Docker Version Check
+-----------------------
+$ docker --version
+Docker version 24.0.6, build ed223bc
+
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+2. kubectl Installation
+-----------------------
+$ kubectl version --client
+Client Version: v1.28.3
+Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
+
+
+3. kind Installation (if using kind)
+------------------------------------
+$ kind version
+kind v0.20.0 go1.20.4 linux/amd64
+
+
+4. Cluster Creation (kind example)
+----------------------------------
+$ ./setup-kind.sh
+
+[INFO] Starting kind cluster setup for K8s Security Lab
+[INFO] Cluster name: k8s-security-lab
+
+[INFO] Checking prerequisites...
+[INFO] Docker is already installed: Docker version 24.0.6, build ed223bc
+[INFO] kind is already installed: kind v0.20.0 go1.20.4 linux/amd64
+[INFO] kubectl is already installed: Client Version: v1.28.3
+[INFO] All prerequisites met
+
+[INFO] Creating kind cluster configuration...
+[INFO] Configuration file created at /tmp/kind-config-k8s-security-lab.yaml
+
+[INFO] Creating kind cluster: k8s-security-lab
+Creating cluster "k8s-security-lab" ...
+ ✓ Ensuring node image (kindest/node:v1.28.0) 🖼
+ ✓ Preparing nodes 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-k8s-security-lab"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-k8s-security-lab
+
+[INFO] Cluster created successfully!
+
+[INFO] Waiting for cluster to be ready...
+node/k8s-security-lab-control-plane condition met
+node/k8s-security-lab-worker condition met
+node/k8s-security-lab-worker2 condition met
+pod/coredns-5d78c9869d-xxxxx condition met
+pod/coredns-5d78c9869d-yyyyy condition met
+pod/etcd-k8s-security-lab-control-plane condition met
+pod/kindnet-xxxxx condition met
+pod/kindnet-yyyyy condition met
+pod/kindnet-zzzzz condition met
+pod/kube-apiserver-k8s-security-lab-control-plane condition met
+pod/kube-controller-manager-k8s-security-lab-control-plane condition met
+pod/kube-proxy-xxxxx condition met
+pod/kube-proxy-yyyyy condition met
+pod/kube-proxy-zzzzz condition met
+pod/kube-scheduler-k8s-security-lab-control-plane condition met
+[INFO] Cluster is ready!
+
+[INFO] Installing metrics-server...
+deployment.apps/metrics-server created
+[INFO] Metrics-server installed (may take a moment to be ready)
+
+[INFO] Cluster Information:
+====================
+Cluster Name: k8s-security-lab
+Kubernetes Version: v1.28.0
+
+[INFO] Nodes:
+NAME                              STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+k8s-security-lab-control-plane    Ready    control-plane   2m    v1.28.0   172.18.0.2    <none>        Ubuntu 22.04.3 LTS   5.15.0-75-generic   containerd://1.7.1
+k8s-security-lab-worker           Ready    <none>          2m    v1.28.0   172.18.0.3    <none>        Ubuntu 22.04.3 LTS   5.15.0-75-generic   containerd://1.7.1
+k8s-security-lab-worker2          Ready    <none>          2m    v1.28.0   172.18.0.4    <none>        Ubuntu 22.04.3 LTS   5.15.0-75-generic   containerd://1.7.1
+
+[INFO] System Pods:
+NAME                                                     READY   STATUS    RESTARTS   AGE
+coredns-5d78c9869d-xxxxx                                1/1     Running   0          2m
+coredns-5d78c9869d-yyyyy                                1/1     Running   0          2m
+etcd-k8s-security-lab-control-plane                     1/1     Running   0          2m
+kindnet-xxxxx                                           1/1     Running   0          2m
+kindnet-yyyyy                                           1/1     Running   0          2m
+kindnet-zzzzz                                           1/1     Running   0          2m
+kube-apiserver-k8s-security-lab-control-plane           1/1     Running   0          2m
+kube-controller-manager-k8s-security-lab-control-plane  1/1     Running   0          2m
+kube-proxy-xxxxx                                        1/1     Running   0          2m
+kube-proxy-yyyyy                                        1/1     Running   0          2m
+kube-proxy-zzzzz                                        1/1     Running   0          2m
+kube-scheduler-k8s-security-lab-control-plane           1/1     Running   0          2m
+metrics-server-xxxxxxxxxx-yyyyy                         1/1     Running   0          1m
+
+[INFO] Cluster Context:
+kind-k8s-security-lab
+
+[INFO] Setup complete! Happy learning!
+
+
+5. Cluster Verification
+-----------------------
+$ kubectl get nodes
+NAME                              STATUS   ROLES           AGE   VERSION
+k8s-security-lab-control-plane    Ready    control-plane   5m    v1.28.0
+k8s-security-lab-worker           Ready    <none>          5m    v1.28.0
+k8s-security-lab-worker2          Ready    <none>          5m    v1.28.0
+
+$ kubectl get pods -n kube-system
+NAME                                                     READY   STATUS    RESTARTS   AGE
+coredns-5d78c9869d-xxxxx                                1/1     Running   0          5m
+coredns-5d78c9869d-yyyyy                                1/1     Running   0          5m
+etcd-k8s-security-lab-control-plane                     1/1     Running   0          5m
+kindnet-xxxxx                                           1/1     Running   0          5m
+kindnet-yyyyy                                           1/1     Running   0          5m
+kindnet-zzzzz                                           1/1     Running   0          5m
+kube-apiserver-k8s-security-lab-control-plane           1/1     Running   0          5m
+kube-controller-manager-k8s-security-lab-control-plane  1/1     Running   0          5m
+kube-proxy-xxxxx                                        1/1     Running   0          5m
+kube-proxy-yyyyy                                        1/1     Running   0          5m
+kube-proxy-zzzzz                                        1/1     Running   0          5m
+kube-scheduler-k8s-security-lab-control-plane           1/1     Running   0          5m
+metrics-server-xxxxxxxxxx-yyyyy                         1/1     Running   0          4m
+
+$ kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:xxxxx
+CoreDNS is running at https://127.0.0.1:xxxxx/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+
+6. Test Deployment
+------------------
+$ kubectl create namespace lab-test
+namespace/lab-test created
+
+$ kubectl create deployment nginx --image=nginx:latest -n lab-test
+deployment.apps/nginx created
+
+$ kubectl get pods -n lab-test
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-7854ff8877-xxxxx   1/1     Running   0          10s
+
+$ kubectl delete namespace lab-test
+namespace "lab-test" deleted
+
+
+7. Environment Verification Script
+-----------------------------------
+$ ./verify-environment.sh
+
+
+╔════════════════════════════════════════════╗
+║  K8s Security Lab Environment Verification ║
+╚════════════════════════════════════════════╝
+
+
+================================
+Checking Docker
+================================
+
+✓ Docker is installed: Docker version 24.0.6, build ed223bc
+✓ Docker daemon is running
+✓ Docker has sufficient memory: 8GB
+
+================================
+Checking kubectl
+================================
+
+✓ kubectl is installed: Client Version: v1.28.3
+✓ kubectl can connect to cluster
+✓ Cluster version: Server Version: v1.28.0
+
+================================
+Checking Cluster Tools
+================================
+
+✓ kind is installed: kind v0.20.0 go1.20.4 linux/amd64
+✓ Found 1 kind cluster(s)
+  - k8s-security-lab
+
+================================
+Checking Cluster Health
+================================
+
+✓ Cluster has 3 node(s)
+✓ All nodes are Ready
+✓ Found 13 system pod(s) in kube-system
+✓ 13 system pod(s) are Running
+✓ API server pod is present
+✓ DNS service is present
+
+================================
+Checking Permissions
+================================
+
+✓ Can create namespaces
+✓ Can create pods
+✓ Can create network policies
+✓ Have cluster-admin or equivalent permissions
+
+================================
+Checking Network Configuration
+================================
+
+✓ Can access Kubernetes service
+✓ kube-proxy is deployed
+
+================================
+Checking Metrics
+================================
+
+✓ metrics-server is installed
+✓ Node metrics are available
+
+================================
+Checking Optional Tools
+================================
+
+✓ helm is installed: v3.12.3+g3a31588
+⚠ k9s is not installed (optional but helpful)
+✓ git is installed: git version 2.34.1
+
+================================
+Verification Summary
+================================
+
+Checks passed:  28
+Checks failed:  0
+Warnings:       1
+
+✓ Environment is ready for K8s security labs!
+
+
+8. Metrics Verification
+-----------------------
+$ kubectl top nodes
+NAME                              CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+k8s-security-lab-control-plane    250m         12%    800Mi           20%
+k8s-security-lab-worker           100m         5%     400Mi           10%
+k8s-security-lab-worker2          100m         5%     400Mi           10%
+
+
+Success Indicators:
+===================
+✓ All cluster nodes show STATUS: Ready
+✓ All system pods show STATUS: Running and READY: 1/1
+✓ kubectl commands execute without errors
+✓ Test namespace and deployment can be created and deleted
+✓ Verification script shows 0 failed checks
+✓ metrics-server is installed and providing node metrics
+✓ Cluster context is correctly set
+
+Your environment is now ready for the Kubernetes security labs!

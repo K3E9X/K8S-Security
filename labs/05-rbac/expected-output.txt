@@ -1,0 +1,101 @@
+Expected Output for Lab 05: RBAC
+==================================
+
+1. Creating ServiceAccounts
+---------------------------
+$ kubectl apply -f manifests/serviceaccounts.yaml
+serviceaccount/developer created
+serviceaccount/viewer created
+serviceaccount/cicd-deployer created
+serviceaccount/cluster-viewer created
+
+2. Testing Developer Permissions
+--------------------------------
+$ kubectl auth can-i create deployments --as=system:serviceaccount:dev:developer -n dev
+yes
+
+$ kubectl auth can-i delete deployments --as=system:serviceaccount:dev:developer -n dev
+yes
+
+$ kubectl auth can-i delete namespaces --as=system:serviceaccount:dev:developer
+no
+
+3. Testing Viewer Permissions
+-----------------------------
+$ kubectl auth can-i get pods --as=system:serviceaccount:dev:viewer -n dev
+yes
+
+$ kubectl auth can-i delete pods --as=system:serviceaccount:dev:viewer -n dev
+no
+
+4. RBAC Audit Output
+-------------------
+$ ./scripts/rbac-audit.sh
+
+========================================
+RBAC Audit Report
+========================================
+
+ServiceAccounts:
+Dev namespace:
+NAME        SECRETS   AGE
+developer   0         5m
+viewer      0         5m
+
+Prod namespace:
+NAME             SECRETS   AGE
+cicd-deployer    0         5m
+
+Lab05 namespace:
+NAME              SECRETS   AGE
+cluster-viewer    0         5m
+
+Roles:
+NAMESPACE   NAME                  AGE
+dev         developer-role        5m
+dev         viewer-role           5m
+prod        cicd-deployer-role    5m
+
+RoleBindings:
+NAMESPACE   NAME                     ROLE                      AGE
+dev         developer-binding        Role/developer-role       5m
+dev         viewer-binding           Role/viewer-role          5m
+prod        cicd-deployer-binding    Role/cicd-deployer-role   5m
+
+ClusterRoles (lab05):
+lab05-namespace-viewer
+lab05-pod-reader
+
+ClusterRoleBindings (lab05):
+lab05-cluster-viewer-binding
+
+Permission Tests:
+
+Developer SA (dev namespace):
+  developer can create deployments in dev: YES
+  developer can delete pods in dev: YES
+  developer can create namespaces in dev: NO
+
+Viewer SA (dev namespace):
+  viewer can get pods in dev: YES
+  viewer can list deployments in dev: YES
+  viewer can delete pods in dev: NO
+
+CI/CD Deployer SA (prod namespace):
+  cicd-deployer can create deployments in prod: YES
+  cicd-deployer can update services in prod: YES
+  cicd-deployer can delete namespaces in prod: NO
+
+========================================
+Audit Complete
+========================================
+
+Success Indicators:
+===================
+✓ ServiceAccounts created in correct namespaces
+✓ Roles define appropriate permissions
+✓ RoleBindings correctly link SAs to Roles
+✓ Developer can manage deployments in dev namespace
+✓ Viewer has read-only access
+✓ CI/CD can deploy to prod
+✓ No unauthorized actions permitted

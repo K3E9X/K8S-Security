@@ -1,0 +1,148 @@
+Expected Output for Lab 09: Image Scanning
+===========================================
+
+1. Trivy Installation
+--------------------
+$ ./scripts/install-trivy.sh
+Installing Trivy...
+✓ Trivy installed successfully!
+Version: 0.48.0
+
+$ trivy --version
+Version: 0.48.0
+
+2. Basic Image Scan
+-------------------
+$ trivy image nginx:latest
+
+nginx:latest (debian 12.2)
+
+Total: 145 (UNKNOWN: 0, LOW: 89, MEDIUM: 32, HIGH: 21, CRITICAL: 3)
+
+┌───────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────┬────────────────────────────────────────────┐
+│    Library    │ Vulnerability  │ Severity │ Status │ Installed Version │ Fixed Version │                   Title                    │
+├───────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────┼────────────────────────────────────────────┤
+│ curl          │ CVE-2023-38545 │ CRITICAL │ fixed  │ 7.88.1-1          │ 7.88.1-2      │ curl: heap buffer overflow in SOCKS5 proxy │
+│               │                │          │        │                   │               │ handshake                                   │
+└───────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────┴────────────────────────────────────────────┘
+
+3. Filtered Scan
+---------------
+$ trivy image --severity HIGH,CRITICAL --ignore-unfixed nginx:alpine
+
+nginx:alpine (alpine 3.18.4)
+
+Total: 0 (HIGH: 0, CRITICAL: 0)
+
+✓ No vulnerabilities found
+
+4. Cosign Installation
+---------------------
+$ ./scripts/install-cosign.sh
+Installing Cosign...
+Downloading Cosign v2.2.0 for linux-amd64...
+✓ Cosign installed successfully!
+v2.2.0
+
+5. Generate Keys
+---------------
+$ cosign generate-key-pair
+Enter password for private key:
+Enter password for private key again:
+Private key written to cosign.key
+Public key written to cosign.pub
+
+6. Sign Image
+------------
+$ cosign sign --key cosign.key localhost:5000/nginx:signed
+Enter password for private key:
+
+        The sigstore service, hosted by sigstore a Series of LF Projects, LLC, is provided pursuant to the Hosted Project Tools Terms of Use...
+
+Pushing signature to: localhost:5000/nginx:signed
+✓ Successfully signed localhost:5000/nginx:signed
+
+7. Verify Signature
+------------------
+$ cosign verify --key cosign.pub localhost:5000/nginx:signed
+
+Verification for localhost:5000/nginx:signed --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - The signatures were verified against the specified public key
+
+[{"critical":{"identity":{"docker-reference":"localhost:5000/nginx"},"image":{"docker-manifest-digest":"sha256:abc123..."},"type":"cosign container image signature"},"optional":null}]
+
+8. Deploy Scanned Application
+-----------------------------
+$ kubectl apply -f manifests/deployment-scanned.yaml
+deployment.apps/scanned-app created
+
+$ kubectl get deployment -n lab09-scanning
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+scanned-app   2/2     2            2           30s
+
+9. Namespace Scan
+----------------
+$ ./scripts/scan-namespace.sh lab09-scanning
+
+Scanning images in namespace: lab09-scanning
+
+Found images:
+nginx:1.25-alpine
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Scanning: nginx:1.25-alpine
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+nginx:1.25-alpine (alpine 3.18.4)
+
+Total: 0 (HIGH: 0, CRITICAL: 0)
+
+✓ Namespace scan complete
+
+10. CI/CD Pipeline Scan
+-----------------------
+$ ./scripts/ci-pipeline-scan.sh nginx:alpine
+
+CI/CD Pipeline - Image Security Scan
+Image: nginx:alpine
+
+[1/5] Scanning image for vulnerabilities...
+✓ No CRITICAL vulnerabilities found
+
+[2/5] Checking HIGH severity vulnerabilities...
+✓ Acceptable number of HIGH vulnerabilities: 0
+
+[3/5] Generating SBOM...
+✓ SBOM generated: sbom-nginx_alpine.json
+
+[4/5] Signing image...
+✓ Image ready for signing
+
+[5/5] Final validation...
+✓ Image passed security checks
+✓ Ready for deployment
+
+Pipeline Summary:
+  Image: nginx:alpine
+  CRITICAL vulnerabilities: 0
+  HIGH vulnerabilities: 0
+  SBOM: Generated
+  Signed: Ready
+
+✓ CI/CD Security Pipeline Complete
+
+Success Indicators:
+===================
+✓ Trivy successfully installed
+✓ Can scan container images
+✓ Vulnerabilities identified and categorized
+✓ Cosign successfully installed
+✓ Keys generated successfully
+✓ Images signed successfully
+✓ Signatures verified successfully
+✓ Scanned images deployed to cluster
+✓ Namespace scanning operational
+✓ CI/CD pipeline integration functional
+✓ SBOM generation working

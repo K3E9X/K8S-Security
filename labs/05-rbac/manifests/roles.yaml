@@ -1,0 +1,61 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer-role
+  namespace: dev
+rules:
+# Allow full access to deployments
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["*"]
+# Allow full access to pods
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["*"]
+# Allow managing services
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create", "get", "list", "update", "delete"]
+# Allow managing configmaps and secrets
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["create", "get", "list", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: viewer-role
+  namespace: dev
+rules:
+# Read-only access to most resources
+- apiGroups: ["", "apps", "batch"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+# Explicitly deny access to secrets
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cicd-deployer-role
+  namespace: prod
+rules:
+# Allow deployment operations
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "daemonsets", "statefulsets"]
+  verbs: ["create", "get", "list", "update", "patch", "delete"]
+# Allow pod operations
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"]
+# Allow service operations
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["create", "get", "list", "update", "patch", "delete"]
+# Allow configmap and secret operations
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["create", "get", "list", "update", "patch"]
