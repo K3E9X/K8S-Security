@@ -44,7 +44,6 @@ theme:
 plugins:
   - search:
       lang: en
-  - mermaid2
 
 markdown_extensions:
   - admonition
@@ -70,36 +69,28 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started:
-    - Overview: README.md
-    - Course Roadmap: SUMMARY.md
-    - Module 00 - Introduction: docs/00-intro.md
-  
+    - Module 00 - Introduction: 00-intro.md
+
   - Foundation (Weeks 1-2):
-    - Module 01 - Kubernetes Basics: docs/01-k8s-basics.md
-    - Module 02 - Control Plane: docs/02-control-plane.md
-    - Module 03 - Networking: docs/03-networking.md
-    - Module 04 - Storage: docs/04-storage.md
-  
+    - Module 01 - Kubernetes Basics: 01-k8s-basics.md
+    - Module 02 - Control Plane: 02-control-plane.md
+    - Module 03 - Networking: 03-networking.md
+    - Module 04 - Storage: 04-storage.md
+
   - Security (Weeks 3-4):
-    - Module 05 - Authentication & Authorization: docs/05-authn-authz.md
-    - Module 06 - Pod Security: docs/06-pod-security.md
-    - Module 07 - Admission & Policy: docs/07-admission-policy.md
-    - Module 08 - Observability: docs/08-observability.md
-    - Module 09 - Supply Chain Security: docs/09-supply-chain.md
-    - Module 10 - Network Security: docs/10-network-security.md
-  
+    - Module 05 - Authentication & Authorization: 05-authn-authz.md
+    - Module 06 - Pod Security: 06-pod-security.md
+    - Module 07 - Admission & Policy: 07-admission-policy.md
+    - Module 08 - Observability: 08-observability.md
+    - Module 09 - Supply Chain Security: 09-supply-chain.md
+    - Module 10 - Network Security: 10-network-security.md
+
   - Advanced (Weeks 5-6):
-    - Module 11 - Runtime Security: docs/11-runtime-security.md
-    - Module 12 - Incident Response: docs/12-incident-response.md
-    - Module 13 - CIS & Compliance: docs/13-cis-compliance.md
-    - Module 14 - Multi-cluster: docs/14-multi-cluster.md
-    - Module 15 - Case Studies: docs/15-case-studies.md
-  
-  - Resources:
-    - References: REFERENCES.md
-    - Contributing: CONTRIBUTING.md
-    - Workflow Guide: WORKFLOW.md
-    - Changelog: CHANGELOG.md
+    - Module 11 - Runtime Security: 11-runtime-security.md
+    - Module 12 - Incident Response: 12-incident-response.md
+    - Module 13 - CIS & Compliance: 13-cis-compliance.md
+    - Module 14 - Multi-cluster: 14-multi-cluster.md
+    - Module 15 - Case Studies: 15-case-studies.md
 
 extra:
   social:
